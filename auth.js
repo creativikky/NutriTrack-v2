@@ -1,4 +1,4 @@
-// js/auth.js
+// auth.js
 import { auth } from './firebase-init.js';
 import {
   GoogleAuthProvider,
