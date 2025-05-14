@@ -11,30 +11,17 @@
   <div class="container">
     <h1 class="mb-4">Dashboard</h1>
     <div class="row">
-      <div class="col-md-4">
-        <canvas id="weeklyChart"></canvas>
-      </div>
+      <div class="col-md-4"><canvas id="weeklyChart"></canvas></div>
       <div class="col-md-4">
         <h5>Today's Progress</h5>
-        <div class="mb-3">
-          <label class="form-label">Energy</label>
-          <div class="progress">
-            <div id="energyBar" class="progress-bar" role="progressbar" style="width: 0%">0/0 kcal</div>
-          </div>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Protein</label>
-          <div class="progress">
-            <div id="proteinBar" class="progress-bar" role="progressbar" style="width: 0%">0/0 g</div>
-          </div>
-        </div>
+        <label class="form-label">Energy</label>
+        <div class="progress mb-3"><div id="energyBar" class="progress-bar" role="progressbar" style="width:0%">0/0 kcal</div></div>
+        <label class="form-label">Protein</label>
+        <div class="progress"><div id="proteinBar" class="progress-bar" role="progressbar" style="width:0%">0/0 g</div></div>
       </div>
       <div class="col-md-4">
         <h5>Today's Meals</h5>
-        <table class="table table-striped">
-          <thead><tr><th>Meal #</th><th>Ingredients</th><th>Energy</th><th>Protein</th></tr></thead>
-          <tbody id="mealSummary"></tbody>
-        </table>
+        <table class="table table-striped"><thead><tr><th>Meal #</th><th>Ingredients</th><th>Energy</th><th>Protein</th></tr></thead><tbody id="mealSummary"></tbody></table>
       </div>
     </div>
   </div>
