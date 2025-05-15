@@ -8,21 +8,20 @@ import {
   createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
 
-const googleBtn   = document.getElementById('googleSignIn');
-const signInBtn   = document.getElementById('signInBtn');
+const googleBtn = document.getElementById('googleSignIn');
+const signInBtn = document.getElementById('signInBtn');
 const registerBtn = document.getElementById('registerBtn');
-const alertBox    = document.getElementById('alertBox');
+const alertBox = document.getElementById('alertBox');
 
 function showError(msg) {
   alertBox.textContent = msg;
   alertBox.classList.remove('d-none');
 }
 
-// Google Sign-in with account chooser
 googleBtn.addEventListener('click', async () => {
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
   try {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
     await signInWithPopup(auth, provider);
     window.location = 'dashboard.html';
   } catch (e) {
@@ -30,10 +29,9 @@ googleBtn.addEventListener('click', async () => {
   }
 });
 
-// Email/Password Sign In
 signInBtn.addEventListener('click', async () => {
   const email = document.getElementById('email').value;
-  const pw    = document.getElementById('password').value;
+  const pw = document.getElementById('password').value;
   try {
     const methods = await fetchSignInMethodsForEmail(auth, email);
     if (methods.includes('password')) {
@@ -49,10 +47,9 @@ signInBtn.addEventListener('click', async () => {
   }
 });
 
-// Email/Password Register
 registerBtn.addEventListener('click', async () => {
   const email = document.getElementById('email').value;
-  const pw    = document.getElementById('password').value;
+  const pw = document.getElementById('password').value;
   try {
     const methods = await fetchSignInMethodsForEmail(auth, email);
     if (methods.length > 0) {

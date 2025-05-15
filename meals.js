@@ -5,7 +5,6 @@ import { collection, addDoc, getDocs, query, where, serverTimestamp } from "http
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.7.1/firebase-auth.js";
 
 redirectIfNotLoggedIn();
-
 let currentUser = null;
 let ingredientList = [];
 
@@ -21,8 +20,7 @@ async function loadIngredientsList() {
   const snapshot = await getDocs(query(collection(db, 'ingredients'), where('uid', '==', currentUser.uid)));
   ingredientList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   document.querySelectorAll('.ingredientSelect').forEach(select => {
-    select.innerHTML = '<option value="">Select Ingredient</option>' +
-      ingredientList.map(i => `<option value="${i.id}">${i.itemName}</option>`).join('');
+    select.innerHTML = '<option value="">Select Ingredient</option>' + ingredientList.map(i => `<option value="${i.id}">${i.itemName}</option>`).join('');
   });
 }
 
@@ -43,29 +41,20 @@ document.getElementById('mealForm').addEventListener('submit', async e => {
     const ing = ingredientList.find(i => i.id === select.value);
     const qty = parseFloat(qtyInput.value);
     return ing ? {
-      ingredientId: ing.id,
-      ingredientName: ing.itemName,
-      quantity: qty,
-      unit: ing.unit,
-      energy: qty * ing.energy / ing.quantity,
-      protein: qty * ing.protein / ing.quantity
+      ingredientId: ing.id, ingredientName: ing.itemName,
+      quantity: qty, unit: ing.unit,
+      energy: (qty * ing.energy / ing.quantity).toFixed(2),
+      protein: (qty * ing.protein / ing.quantity).toFixed(2)
     } : null;
   }).filter(item => item);
-  const totalEnergy = items.reduce((sum,i) => sum + i.energy, 0);
-  const totalProtein = items.reduce((sum,i) => sum + i.protein, 0);
+  const totalEnergy = items.reduce((sum, i) => sum + parseFloat(i.energy), 0);
+  const totalProtein = items.reduce((sum, i) => sum + parseFloat(i.protein), 0);
   try {
-    await addDoc(collection(db, 'meals'), {
-      uid: currentUser.uid,
-      mealNumber,
-      items,
-      totalEnergy,
-      totalProtein,
-      createdAt: serverTimestamp()
-    });
+    await addDoc(collection(db, 'meals'), { uid: currentUser.uid, mealNumber, items, totalEnergy, totalProtein, createdAt: serverTimestamp() });
     e.target.reset();
     loadMeals();
   } catch (err) {
-    alert('Error adding meal: ' + err.message);
+    console.error(err);
   }
 });
 
@@ -76,7 +65,7 @@ async function loadMeals() {
   snapshot.docs.forEach(doc => {
     const m = doc.data();
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${m.mealNumber}</td><td>${m.items.map(i => i.ingredientName).join(', ')}</td><td>${m.items.reduce((sum,i)=>sum+i.quantity,0)}</td><td>${m.totalEnergy.toFixed(2)}</td><td>${m.totalProtein.toFixed(2)}</td><td></td>`;
+    tr.innerHTML = `<td>${m.mealNumber}</td><td>${m.items.map(i => i.ingredientName).join(',')}</td><td>${m.items.reduce((sum,i)=>sum+parseFloat(i.quantity),0)}</td><td>${m.totalEnergy.toFixed(2)}</td><td>${m.totalProtein.toFixed(2)}</td><td></td>`;
     table.appendChild(tr);
   });
 }
