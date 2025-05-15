@@ -18,10 +18,12 @@ function showError(msg) {
   alertBox.classList.remove('d-none');
 }
 
-// Google Sign-in
+// Google Sign-in with account chooser
 googleBtn.addEventListener('click', async () => {
   try {
-    await signInWithPopup(auth, new GoogleAuthProvider());
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+    await signInWithPopup(auth, provider);
     window.location = 'dashboard.html';
   } catch (e) {
     showError(e.message);
@@ -40,9 +42,7 @@ signInBtn.addEventListener('click', async () => {
     } else if (methods.length === 0) {
       throw new Error('No account found—please register first.');
     } else {
-      throw new Error(
-        `This email is registered via ${methods.join(', ')}. Use the appropriate sign-in method.`
-      );
+      throw new Error(\`This email is registered via \${methods.join(', ')}. Use the appropriate sign-in method.\`);
     }
   } catch (e) {
     showError(e.message);
