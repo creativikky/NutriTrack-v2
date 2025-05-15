@@ -1,1 +1,32 @@
-<!DOCTYPE html><html><body>Meals</body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>NutriTrack-v2 — Meals</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <nav class="navbar navbar-light bg-light"><div class="container-fluid">
+    <a href="dashboard.html" class="btn btn-outline-primary">Dashboard</a>
+  </div></nav>
+  <div class="container p-3">
+    <h1>Meals</h1>
+    <form id="mealForm" class="mb-4">
+      <input id="mealNumber" type="number" class="form-control mb-2" placeholder="Meal #" required>
+      <div id="ingredientRows" class="mb-2">
+        <div class="input-group mb-2">
+          <select class="form-select ingredientSelect"><option value="">Select Ingredient</option></select>
+          <input type="number" class="form-control ingredientQty" step="any" placeholder="Qty" required>
+          <span class="input-group-text unitLabel"></span>
+        </div>
+      </div>
+      <button type="button" id="addRow" class="btn btn-secondary mb-2">Add Row</button>
+      <button type="submit" class="btn btn-primary">Add Meal</button>
+    </form>
+    <table class="table table-striped"><thead><tr><th>Meal #</th><th>Ingredients</th><th>Qty</th><th>Energy</th><th>Protein</th></tr></thead><tbody id="mealTable"></tbody></table>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="meals.js"></script>
+</body>
+</html>
