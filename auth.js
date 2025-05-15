@@ -3,6 +3,7 @@ import { auth } from './firebase-init.js';
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  /* signInWithRedirect, */           // uncomment to use redirect fallback
   fetchSignInMethodsForEmail,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword
@@ -18,51 +19,78 @@ function showError(msg) {
   alertBox.classList.remove('d-none');
 }
 
-// 1) Google sign-in with chooser
+// — Google Sign-in with explicit logging
 googleBtn.addEventListener('click', async () => {
+  console.log('👉 Google button clicked');
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  
   try {
-    const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
-    await signInWithPopup(auth, provider);
+    // Popup flow:
+    const result = await signInWithPopup(auth, provider);
+    console.log('✅ popup result:', result);
     window.location = 'dashboard.html';
+
+    // Redirect fallback (uncomment to use):
+    // console.log('👉 Redirecting for Google sign-in');
+    // await signInWithRedirect(auth, provider);
+
   } catch (e) {
-    showError(e.message);
+    console.error('❌ Google sign-in error:', e.code, e.message);
+    showError(`Google sign-in failed: ${e.message}`);
   }
 });
 
-// 2) Email sign-in
+// — Email/Password Sign-In
 signInBtn.addEventListener('click', async () => {
   const email = document.getElementById('email').value;
   const pw    = document.getElementById('password').value;
+
+  console.log(`👉 Attempting email sign-in for ${email}`);
   try {
     const methods = await fetchSignInMethodsForEmail(auth, email);
+    console.log('   Available sign-in methods:', methods);
+    
     if (methods.includes('password')) {
       await signInWithEmailAndPassword(auth, email, pw);
+      console.log('✅ Email sign-in success');
       window.location = 'dashboard.html';
+
     } else if (methods.length === 0) {
       throw new Error('No account found—please register first.');
+
     } else {
       throw new Error(
         `This email is registered via ${methods.join(', ')}. Use that method.`
       );
     }
+
   } catch (e) {
+    console.error('❌ Email sign-in error:', e.message);
     showError(e.message);
   }
 });
 
-// 3) Email registration
+// — Email/Password Registration
 registerBtn.addEventListener('click', async () => {
   const email = document.getElementById('email').value;
   const pw    = document.getElementById('password').value;
+
+  console.log(`👉 Attempting registration for ${email}`);
   try {
     const methods = await fetchSignInMethodsForEmail(auth, email);
+    console.log('   Existing sign-in methods:', methods);
+
     if (methods.length > 0) {
-      throw new Error('Account exists—please sign in.');
+      throw new Error('An account already exists—please sign in instead.');
     }
+    
     await createUserWithEmailAndPassword(auth, email, pw);
+    console.log('✅ Registration success');
     window.location = 'dashboard.html';
+
   } catch (e) {
+    console.error('❌ Registration error:', e.message);
     showError(e.message);
   }
 });
