@@ -1,5 +1,8 @@
 import { db, auth } from './firebase-init.js';
-import { collection, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js';
+import { 
+  collection, addDoc, query, where, orderBy,
+  onSnapshot, serverTimestamp, deleteDoc, doc 
+} from 'https://www.gstatic.com/firebasejs/11.7.1/firebase-firestore.js';
 import { redirectIfNotLoggedIn } from './auth.js';
 
 let currentUser = null;
@@ -69,7 +72,7 @@ function loadIngredients() {
         <td>${data.unit}</td>
         <td>${data.energy}</td>
         <td>${data.protein}</td>
-        <td><button data-id="${docSnap.id}" class="deleteBtn">Delete</button></td>
+        <td><button data-id="\${docSnap.id}" class="deleteBtn">Delete</button></td>
       `;
       tableBody.appendChild(row);
     });
